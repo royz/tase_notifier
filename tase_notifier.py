@@ -35,6 +35,7 @@ def get_date():
 def notify(new_date, updated_on):
     print(f'Changed on: {updated_on}')
     print(f'Date now is: {new_date}')
+    playsound('beep.mp3')
 
 
 if __name__ == '__main__':
@@ -51,7 +52,6 @@ if __name__ == '__main__':
             print(updated_on)
             time.sleep(240)
             notify(new_date, updated_on)
-            playsound('beep.mp3')
             first_date = new_date
         else:
             time.sleep(30)
