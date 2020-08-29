@@ -58,6 +58,7 @@ if __name__ == '__main__':
             time.sleep(240)
             notify(new_date, updated_on)
             first_date = new_date
+            quit(0)
         else:
             print(f'{updated_on} | date has not updated')
             time.sleep(30)
