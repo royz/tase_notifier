@@ -48,15 +48,16 @@ if __name__ == '__main__':
 
     while True:
         new_date = get_date()
+        updated_on = datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
         if not first_date:
             first_date = new_date
             print(f'current date is {first_date}. checking for updates every 30 seconds...')
 
         if new_date != first_date:
-            updated_on = datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
             print(updated_on)
             time.sleep(240)
             notify(new_date, updated_on)
             first_date = new_date
         else:
+            print(f'{updated_on} | date has not updated')
             time.sleep(30)
