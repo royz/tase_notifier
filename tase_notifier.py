@@ -1,5 +1,6 @@
 import datetime
 import time
+import ctypes
 import requests
 from playsound import playsound
 
@@ -32,10 +33,14 @@ def get_date():
         print(e)
 
 
+def Mbox(title, text, style):
+    return ctypes.windll.user32.MessageBoxW(0, text, title, style)
+
+
 def notify(new_date, updated_on):
-    print(f'Changed on: {updated_on}')
-    print(f'Date now is: {new_date}')
     playsound('beep.mp3')
+    msg = f'Changed on: {updated_on}\nDate now is: {new_date}'
+    Mbox('Date changed', msg, 1)
 
 
 if __name__ == '__main__':
