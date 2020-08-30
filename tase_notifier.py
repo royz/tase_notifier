@@ -49,7 +49,7 @@ def notify(new_date, updated_on):
 
 
 if __name__ == '__main__':
-    first_date = 'dg'
+    first_date = None
 
     while True:
         try:
@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
             if new_date != first_date:
                 print(f'{updated_on} | date has updated. waiting for 4 minutes before notifying...')
-                time.sleep(2)
+                time.sleep(240)
                 open_browser = notify(new_date, updated_on) == 1
                 if open_browser:
                     print('opening link in a browser...')
