@@ -2,6 +2,7 @@ import datetime
 import time
 import ctypes
 import requests
+import webbrowser
 from playsound import playsound
 
 
@@ -34,31 +35,43 @@ def get_date():
 
 
 def Mbox(title, text, style):
-    return ctypes.windll.user32.MessageBoxW(0, text, title, style)
+    try:
+        return ctypes.windll.user32.MessageBoxW(0, text, title, style)
+    except Exception as e:
+        print(f'failed to initialize message box. [{" ".join(str(e).split())}]')
+        return None
 
 
 def notify(new_date, updated_on):
     playsound('beep.mp3')
     msg = f'Changed on: {updated_on}\nDate now is: {new_date}'
-    Mbox('Date changed', msg, 1)
+    return Mbox('Date changed', msg, 1)
 
 
 if __name__ == '__main__':
-    first_date = None
+    first_date = 'dg'
 
     while True:
-        new_date = get_date()
-        updated_on = datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
-        if not first_date:
-            first_date = new_date
-            print(f'current date is {first_date}. checking for updates every 30 seconds...')
+        try:
+            new_date = get_date()
+            updated_on = datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+            if not first_date:
+                first_date = new_date
+                print(f'current date is {first_date}. checking for updates every 30 seconds...')
 
-        if new_date != first_date:
-            print(updated_on)
-            time.sleep(240)
-            notify(new_date, updated_on)
-            first_date = new_date
-            quit(0)
-        else:
-            print(f'{updated_on} | date has not updated')
-            time.sleep(30)
+            if new_date != first_date:
+                print(f'{updated_on} | date has updated. waiting for 4 minutes before notifying...')
+                time.sleep(2)
+                open_browser = notify(new_date, updated_on) == 1
+                if open_browser:
+                    print('opening link in a browser...')
+                    webbrowser.open(
+                        'https://www.tase.co.il/he/market_data/indices/updates/parameters/listed_capital?isAdd=1', 2)
+                else:
+                    print('closing script...')
+                quit(0)
+            else:
+                print(f'{updated_on} | date has not updated. [current date: {new_date}]')
+                time.sleep(30)
+        except Exception as e:
+            print(e)
