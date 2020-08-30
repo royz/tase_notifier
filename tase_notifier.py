@@ -34,7 +34,11 @@ def get_date():
 
 
 def Mbox(title, text, style):
-    return ctypes.windll.user32.MessageBoxW(0, text, title, style)
+    try:
+        return ctypes.windll.user32.MessageBoxW(0, text, title, style)
+    except Exception as e:
+        print(f'failed to initialize message box. [{" ".join(str(e).split())}]')
+        return None
 
 
 def notify(new_date, updated_on):
@@ -44,7 +48,7 @@ def notify(new_date, updated_on):
 
 
 if __name__ == '__main__':
-    first_date = None
+    first_date = 'dg'
 
     while True:
         new_date = get_date()
@@ -54,11 +58,10 @@ if __name__ == '__main__':
             print(f'current date is {first_date}. checking for updates every 30 seconds...')
 
         if new_date != first_date:
-            print(updated_on)
+            print(f'{updated_on} | date has updated. waiting for 4 minutes before notifying...')
             time.sleep(240)
             notify(new_date, updated_on)
-            first_date = new_date
             quit(0)
         else:
-            print(f'{updated_on} | date has not updated')
+            print(f'{updated_on} | date has not updated. [current date: {new_date}]')
             time.sleep(30)
