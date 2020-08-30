@@ -1,6 +1,7 @@
-import datetime
+import os
 import time
 import ctypes
+import datetime
 import requests
 import webbrowser
 from playsound import playsound
@@ -43,7 +44,8 @@ def Mbox(title, text, style):
 
 
 def notify(new_date, updated_on):
-    playsound('beep.mp3')
+    sound_file = os.path.join(os.path.dirname(__file__), 'beep.mp3')
+    playsound(sound_file)
     msg = f'Changed on: {updated_on}\nDate now is: {new_date}'
     return Mbox('Date changed', msg, 1)
 
