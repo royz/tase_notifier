@@ -59,8 +59,8 @@ def render_reports(reports):
                               highlightthickness=1)
         upper_frame = tk.Frame(master=main_frame, pady=3)
         tk.Label(upper_frame, text=f'{report["date"]}  ', font=fontStyle,
-                 ).grid(row=0, column=0, sticky=tk.W)
-        tk.Label(upper_frame, text=report['company'], font=fontStyle).grid(row=0, column=1)
+                 width=15, bg='#a3d2ca').grid(row=0, column=0, sticky=tk.W)
+        tk.Label(upper_frame, text=report['company'], font=fontStyle, width=25, bg='#a3d2ca').grid(row=0, column=1)
         tk.Button(
             upper_frame, text='open link',
             command=lambda rep_id=report['id']: open_link(rep_id)
@@ -68,9 +68,9 @@ def render_reports(reports):
 
         lower_frame = tk.Frame(master=main_frame, pady=3)
         tk.Label(lower_frame, text=report['text'], font=fontStyle,
-                 wraplength=600, justify=tk.LEFT).grid(row=0, column=0, sticky='ew')
-        upper_frame.grid(row=0, column=0, columnspan=2, sticky=tk.E + tk.W)
-        lower_frame.grid(row=1, column=0, sticky='ew')
+                 wraplength=600, justify=tk.LEFT, width=47).grid(row=0, column=0)
+        upper_frame.grid(row=0, column=0, columnspan=2)
+        lower_frame.grid(row=1, column=0)
         main_frame.grid(row=i, column=0)
 
 
