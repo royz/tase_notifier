@@ -1,6 +1,15 @@
 import requests
 from pprint import pprint
 import datetime
+import tkinter as tk
+import tkinter.font as tk_font
+import webbrowser
+from playsound import playsound
+import os
+
+
+def open_link(rep_id):
+    webbrowser.open(f'https://maya.tase.co.il/reports/details/{rep_id}')
 
 
 def get_reports():
@@ -42,10 +51,55 @@ def get_reports():
 
 
 def render_reports(reports):
-    pass
+    for wd in root.winfo_children():
+        wd.destroy()
+
+    for i, report in enumerate(reports):
+        main_frame = tk.Frame(master=root, padx=5, bg='#e1e1e1', highlightbackground="#cccccc",
+                              highlightthickness=1)
+        upper_frame = tk.Frame(master=main_frame, pady=3)
+        tk.Label(upper_frame, text=f'{report["date"]}  ', font=fontStyle,
+                 ).grid(row=0, column=0, sticky=tk.W)
+        tk.Label(upper_frame, text=report['company'], font=fontStyle).grid(row=0, column=1)
+        tk.Button(
+            upper_frame, text='open link',
+            command=lambda rep_id=report['id']: open_link(rep_id)
+        ).grid(row=0, column=2, sticky=tk.E)
+
+        lower_frame = tk.Frame(master=main_frame, pady=3)
+        tk.Label(lower_frame, text=report['text'], font=fontStyle,
+                 wraplength=600, justify=tk.LEFT).grid(row=0, column=0, sticky='ew')
+        upper_frame.grid(row=0, column=0, columnspan=2, sticky=tk.E + tk.W)
+        lower_frame.grid(row=1, column=0, sticky='ew')
+        main_frame.grid(row=i, column=0)
+
+
+def check_for_updates():
+    global report_ids
+    print('checking for updates...')
+
+    reports = get_reports()
+    new_report_ids = [report['id'] for report in reports]
+    if not report_ids:
+        report_ids = new_report_ids
+        render_reports(reports)
+    else:
+        if report_ids != new_report_ids:
+            print('reports updated')
+            playsound(sound_file)
+            render_reports(reports)
+        else:
+            pass
+    root.after(3000, check_for_updates)
 
 
 if __name__ == '__main__':
-    while True:
-        reports = get_reports()
-        render_reports(reports)
+    sound_file = os.path.join(os.path.dirname(__file__), 'beep.mp3')
+    root = tk.Tk()
+    root.title("Check Reports")
+    root.resizable(False, False)
+    fontStyle = tk_font.Font(size=12)
+    report_ids = None
+
+    check_for_updates()
+    root.mainloop()
