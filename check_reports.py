@@ -40,7 +40,8 @@ def get_reports():
                 date = report['PubDate']
             top_reports.append({
                 'id': report['RptCode'],
-                'text': report['Subject'],
+                'text': 'this is a very long text to test the wrapping of the lines in a label. that was still not enough so I am adding more text',
+                # 'text': report['Subject'],
                 'date': date,
                 'company': report['FormalCompanyData']['CompanyName']
             })
@@ -68,7 +69,7 @@ def render_reports(reports):
 
         lower_frame = tk.Frame(master=main_frame, pady=3)
         tk.Label(lower_frame, text=report['text'], font=fontStyle,
-                 wraplength=600, justify=tk.LEFT, width=47).grid(row=0, column=0)
+                 wraplength=400, justify=tk.LEFT, width=47).grid(row=0, column=0)
         upper_frame.grid(row=0, column=0, columnspan=2)
         lower_frame.grid(row=1, column=0)
         main_frame.grid(row=i, column=0)
@@ -85,6 +86,7 @@ def check_for_updates():
         render_reports(reports)
     else:
         if report_ids != new_report_ids:
+            report_ids = new_report_ids
             print('reports updated')
             playsound(sound_file)
             render_reports(reports)
