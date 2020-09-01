@@ -1,5 +1,4 @@
 import requests
-from pprint import pprint
 import datetime
 import tkinter as tk
 import tkinter.font as tk_font
@@ -40,9 +39,9 @@ def get_reports():
                 date = report['PubDate']
             top_reports.append({
                 'id': report['RptCode'],
-                'text': report['Subject'],
+                'text': report['Subject'].strip(),
                 'date': date,
-                'company': report['FormalCompanyData']['CompanyName']
+                'company': report['FormalCompanyData']['CompanyName'].strip()
             })
         except Exception as e:
             print(e)
