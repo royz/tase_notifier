@@ -40,8 +40,7 @@ def get_reports():
                 date = report['PubDate']
             top_reports.append({
                 'id': report['RptCode'],
-                'text': 'this is a very long text to test the wrapping of the lines in a label. that was still not enough so I am adding more text',
-                # 'text': report['Subject'],
+                'text': report['Subject'],
                 'date': date,
                 'company': report['FormalCompanyData']['CompanyName']
             })
