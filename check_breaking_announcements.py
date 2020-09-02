@@ -58,8 +58,8 @@ def render_reports(reports):
                               highlightthickness=1)
         upper_frame = tk.Frame(master=main_frame, pady=3)
         tk.Label(upper_frame, text=f'{report["date"]}  ', font=fontStyle,
-                 width=15, bg='#a3d2ca').grid(row=0, column=0, sticky=tk.W)
-        tk.Label(upper_frame, text=report['company'], font=fontStyle, width=25, bg='#a3d2ca').grid(row=0, column=1)
+                 width=15, bg='#ff8e6e').grid(row=0, column=0, sticky=tk.W)
+        tk.Label(upper_frame, text=report['company'], font=fontStyle, width=25, bg='#ff8e6e').grid(row=0, column=1)
         tk.Button(
             upper_frame, text='open link',
             command=lambda rep_id=report['id']: open_link(rep_id)
