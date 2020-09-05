@@ -67,7 +67,7 @@ def render_reports(reports):
 
         lower_frame = tk.Frame(master=main_frame, pady=3)
         tk.Label(lower_frame, text=report['text'], font=fontStyle,
-                 wraplength=400, justify=tk.LEFT, width=47).grid(row=0, column=0)
+                 wraplength=400, anchor=tk.E, width=47).grid(row=0, column=0)
         upper_frame.grid(row=0, column=0, columnspan=2)
         lower_frame.grid(row=1, column=0)
         main_frame.grid(row=i, column=0)
