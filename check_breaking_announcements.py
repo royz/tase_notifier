@@ -5,6 +5,7 @@ import tkinter.font as tk_font
 import webbrowser
 from playsound import playsound
 import os
+import time
 
 
 def open_link(rep_id):
@@ -28,7 +29,12 @@ def get_reports():
         'Referer': 'https://maya.tase.co.il/reports/breakingannouncement',
     }
 
-    response = requests.get('https://mayaapi.tase.co.il/api/report/breakingannouncement', headers=headers)
+    try:
+        response = requests.get('https://mayaapi.tase.co.il/api/report/breakingannouncement', headers=headers)
+    except:
+        print('request timed out. sleeping for 30 seconds...')
+        time.sleep(30)
+        return get_reports()
 
     top_reports = []
     for report in response.json()['Reports'][:5]:
@@ -44,7 +50,6 @@ def get_reports():
                 'company': report['FormalCompanyData']['CompanyName'].strip()
             })
         except Exception as e:
-            print(e)
             pass
     return top_reports
 
@@ -67,7 +72,7 @@ def render_reports(reports):
 
         lower_frame = tk.Frame(master=main_frame, pady=3)
         tk.Label(lower_frame, text=report['text'], font=fontStyle,
-                 wraplength=400, justify=tk.LEFT, width=47).grid(row=0, column=0)
+                 wraplength=400, anchor=tk.E, width=47).grid(row=0, column=0)
         upper_frame.grid(row=0, column=0, columnspan=2)
         lower_frame.grid(row=1, column=0)
         main_frame.grid(row=i, column=0)

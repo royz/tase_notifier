@@ -5,6 +5,7 @@ import tkinter.font as tk_font
 import webbrowser
 from playsound import playsound
 import os
+import time
 
 
 def open_link(rep_id):
@@ -27,8 +28,12 @@ def get_reports():
         'Sec-Fetch-Dest': 'empty',
         'Referer': 'https://maya.tase.co.il/reports/company',
     }
-
-    response = requests.get('https://mayaapi.tase.co.il/api/report/company', headers=headers)
+    try:
+        response = requests.get('https://mayaapi.tase.co.il/api/report/company', headers=headers)
+    except:
+        print('request timed out. sleeping for 30 seconds...')
+        time.sleep(30)
+        return get_reports()
 
     top_reports = []
     for report in response.json()['Reports'][:5]:
