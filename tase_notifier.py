@@ -5,6 +5,7 @@ import datetime
 import requests
 import webbrowser
 from playsound import playsound
+import tkinter as tk
 
 
 def get_date():
@@ -35,22 +36,30 @@ def get_date():
         print(e)
 
 
-def Mbox(title, text, style):
-    try:
-        return ctypes.windll.user32.MessageBoxW(0, text, title, style)
-    except Exception as e:
-        print(f'failed to initialize message box. [{" ".join(str(e).split())}]')
-        return None
+def open_link(link):
+    global root
+    print('opening link in browser...')
+    webbrowser.open(link)
+    root.destroy()
 
 
-def notify(new_date, updated_on):
+def notify(new_date, updated_on, url):
+    global root
     sound_file = os.path.join(os.path.dirname(__file__), 'beep.mp3')
     playsound(sound_file)
     msg = f'Changed on: {updated_on}\nDate now is: {new_date}'
-    return Mbox('Date changed', msg, 1)
+    root = tk.Tk()
+    root.attributes("-topmost", True)
+    root.resizable(False, False)
+    tk.Label(root, text=msg).pack()
+    tk.Button(root, text='Open Link in Browser', width='20', pady='10',
+              command=lambda link=url: open_link(link)).pack()
+    tk.Button(root, text='Close', width='20', pady='10', command=root.destroy).pack()
+    root.mainloop()
 
 
 if __name__ == '__main__':
+    root = None
     first_date = None
 
     while True:
@@ -64,13 +73,7 @@ if __name__ == '__main__':
             if new_date != first_date:
                 print(f'{updated_on} | date has updated. waiting for 4 minutes before notifying...')
                 time.sleep(240)
-                open_browser = notify(new_date, updated_on) == 1
-                if open_browser:
-                    print('opening link in a browser...')
-                    webbrowser.open(
-                        'https://www.tase.co.il/he/market_data/indices/updates/parameters/listed_capital?isAdd=1', 2)
-                else:
-                    print('closing script...')
+                notify()
                 quit(0)
             else:
                 print(f'{updated_on} | date has not updated. [current date: {new_date}]')
