@@ -35,14 +35,15 @@ def get_date():
         print(e)
 
 
-def open_link(link):
+def open_link():
     global root
     print('opening link in browser...')
-    webbrowser.open(link)
+    webbrowser.open(
+        'https://www.tase.co.il/he/market_data/indices/updates/parameters/listed_capital?isAdd=1', 2)
     root.destroy()
 
 
-def notify(new_date, updated_on, url):
+def notify(new_date, updated_on):
     global root
     sound_file = os.path.join(os.path.dirname(__file__), 'beep.mp3')
     playsound(sound_file)
@@ -52,7 +53,7 @@ def notify(new_date, updated_on, url):
     root.resizable(False, False)
     tk.Label(root, text=msg).pack()
     tk.Button(root, text='Open Link in Browser', width='20', pady='10',
-              command=lambda link=url: open_link(link)).pack()
+              command=open_link).pack()
     tk.Button(root, text='Close', width='20', pady='10', command=root.destroy).pack()
     root.mainloop()
 
@@ -72,7 +73,7 @@ if __name__ == '__main__':
             if new_date != first_date:
                 print(f'{updated_on} | date has updated. waiting for 4 minutes before notifying...')
                 time.sleep(240)
-                notify()
+                notify(new_date, updated_on, )
                 quit(0)
             else:
                 print(f'{updated_on} | date has not updated. [current date: {new_date}]')
