@@ -1,6 +1,5 @@
 import os
 import time
-import ctypes
 import datetime
 import requests
 import webbrowser
