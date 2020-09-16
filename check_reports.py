@@ -42,11 +42,27 @@ def get_reports():
                 date = datetime.datetime.strptime(report['PubDate'], '%Y-%m-%dT%H:%M:%S.%f').strftime('%H:%M %d/%m/%Y')
             except:
                 date = report['PubDate']
+
+            try:
+                title = ''
+                companies = report['Companies']
+                for company in reversed(companies):
+                    for indication in reversed(company['Indications']):
+                        title += f'{indication} '
+                if title != '':
+                    title += '| '
+                    for company in reversed(companies):
+                        title += f"{company['TitleName']} "
+                else:
+                    title = report['FormalCompanyData']['CompanyName']
+            except:
+                title = report['FormalCompanyData']['CompanyName']
+
             top_reports.append({
                 'id': report['RptCode'],
                 'text': report['Subject'].strip(),
                 'date': date,
-                'company': report['FormalCompanyData']['CompanyName'].strip()
+                'company': title.strip()
             })
         except Exception as e:
             print(e)
